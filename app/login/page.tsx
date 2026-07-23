@@ -26,42 +26,45 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center" dir="rtl">
-      <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">ورود به حساب کاربری</h2>
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center" dir="rtl">
+      <div className="bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-yellow-400 mb-2">ورود به حساب کاربری</h2>
+        <p className="text-center text-gray-400 text-sm mb-6">به حساب خود وارد شوید</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">ایمیل</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1 text-right">ایمیل</label>
             <input
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-right"
+              placeholder="example@email.com"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">رمز عبور</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1 text-right">رمز عبور</label>
             <input
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-right"
+              placeholder="••••••"
               required
             />
           </div>
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg py-2 transition disabled:opacity-50"
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg py-2 transition disabled:opacity-50"
           >
             {loading ? "در حال ورود..." : "ورود"}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-gray-400 mt-4">
           حساب ندارید؟{" "}
-          <a href="/signup" className="text-blue-600 hover:underline">ثبت‌نام</a>
+          <a href="/signup" className="text-yellow-400 hover:underline">ثبت‌نام</a>
         </p>
       </div>
     </div>

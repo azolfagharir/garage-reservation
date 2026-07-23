@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
 
+const TIME_RANGE_REGEX = /^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$/;
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -16,6 +18,23 @@ export async function PATCH(
     const { id } = await params;
     const bookingId = parseInt(id);
     const { status, confirmedTime } = await req.json();
+
+    if (confirmedTime && !TIME_RANGE_REGEX.test(confirmedTime)) {
+      return NextResponse.json(
+        { error: "فرمت بازه زمانی نامعتبر است. مثال صحیح: 08:00-10:00" },
+        { status: 400 }
+      );
+    }
+
+    if (confirmedTime) {
+      const [start, end] = confirmedTime.split("-");
+      if (start >= end) {
+        return NextResponse.json(
+          { error: "ساعت پایان باید بعد از ساعت شروع باشد" },
+          { status: 400 }
+        );
+      }
+    }
 
     const mechanic = await prisma.mechanic.findUnique({ where: { userId } });
     if (!mechanic) return NextResponse.json({ error: "Forbidden" }, { status: 403 });

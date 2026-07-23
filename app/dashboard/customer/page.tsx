@@ -48,6 +48,11 @@ export default function CustomerPage() {
       .catch(() => router.push("/login"));
   }, [router]);
 
+  async function cancelBooking(id: number) {
+    await fetch(`/api/customer/bookings/${id}`, { method: "DELETE" });
+    setBookings((prev) => prev.filter((b) => b.id !== id));
+  }
+
   if (!user) return null;
 
   const statusLabel: Record<string, string> = {
@@ -90,6 +95,7 @@ export default function CustomerPage() {
                   <th className="text-right py-3 px-4">تاریخ</th>
                   <th className="text-right py-3 px-4">ساعت</th>
                   <th className="text-right py-3 px-4">وضعیت</th>
+                  <th className="text-right py-3 px-4">عملیات</th>
                 </tr>
               </thead>
               <tbody>
@@ -105,6 +111,16 @@ export default function CustomerPage() {
                       <span className={`text-xs font-bold px-2 py-1 rounded-lg ${statusColor[b.status] ?? "bg-gray-600 text-white"}`}>
                         {statusLabel[b.status] ?? b.status}
                       </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      {b.status === "PENDING" && (
+                        <button
+                          onClick={() => cancelBooking(b.id)}
+                          className="text-xs text-red-400 hover:text-red-300 border border-red-800 hover:border-red-600 px-2 py-1 rounded transition"
+                        >
+                          لغو درخواست
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -14,7 +14,9 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center shadow-lg">
-      <Link href="/" className="text-xl font-bold text-yellow-400">🔩 گاراژ آنلاین</Link>
+      <Link href="/" className="text-xl font-bold text-yellow-400">
+<img src="/acharino.png" className="w-20" alt="Acharino" />
+      </Link>
       <div className="flex gap-4 items-center">
         {user ? (
           <>

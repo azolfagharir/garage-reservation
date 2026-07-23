@@ -1,3 +1,4 @@
+// app/api/customer/bookings/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
       where: { customerId: userId },
       include: {
         mechanic: { include: { user: { select: { name: true } } } },
-        service: { select: { name: true, duration: true } },
+        service: { select: { name: true } },
       },
       orderBy: { date: "desc" },
     });
