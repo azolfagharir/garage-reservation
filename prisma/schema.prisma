@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  MECHANIC
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  DONE
+  CANCELLED
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(CUSTOMER)
+  city      String?
+  createdAt DateTime  @default(now())
+  mechanic  Mechanic?
+  bookings  Booking[]
+}
+
+model Mechanic {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+  city      String
+  address   String
+  workStart String
+  workEnd   String
+  services  Service[]
+  bookings  Booking[]
+}
+
+model Service {
+  id         Int       @id @default(autoincrement())
+  name       String
+  duration   Int
+  mechanicId Int
+  mechanic   Mechanic  @relation(fields: [mechanicId], references: [id])
+  bookings   Booking[]
+}
+
+model Booking {
+  id            Int           @id @default(autoincrement())
+  customerId    Int
+  customer      User          @relation(fields: [customerId], references: [id])
+  mechanicId    Int
+  mechanic      Mechanic      @relation(fields: [mechanicId], references: [id])
+  serviceId     Int
+  service       Service       @relation(fields: [serviceId], references: [id])
+  date          DateTime      @db.Date        // فقط تاریخ (YYYY-MM-DD)
+  confirmedTime String?                       // ساعت تایید شده توسط مکانیک، مثلاً "10:30"
+  status        BookingStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+}
