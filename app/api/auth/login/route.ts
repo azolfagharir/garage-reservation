@@ -1,3 +1,4 @@
+// app/api/auth/login/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -14,5 +15,14 @@ export async function POST(req: Request) {
     process.env.JWT_SECRET!,
     { expiresIn: "7d" }
   );
-  return NextResponse.json({ token, role: user.role });
+
+  const res = NextResponse.json({ role: user.role });
+  res.cookies.set("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7, // 7 روز
+  });
+  return res;
 }
